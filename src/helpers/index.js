@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken"
-import { ACCESS_SECRET, REFRESH_SECRET } from "../config/config"
+import { ACCESS_SECRET } from "../config/config"
 import crypto from "crypto"
 
 export function refreshToken() {
@@ -8,6 +8,6 @@ export function refreshToken() {
 
 export function accessToken(payload) {
     return jwt.sign(payload, ACCESS_SECRET, {
-        expiresIn: "1min"
+        expiresIn: "10s"
     })
 }

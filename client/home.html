@@ -9,33 +9,30 @@
 </head>
 <body>
     
-    <h1>Custom Interceptor</h1>
+    <h1>HOME PAGE</h1>
     <div class="links-cont">
-        <a href="./index.html">Login</a>
-        <a href="./signup.html">Signup</a>
+        <a href="">Logout</a>
     </div>
-    <br>
-    <div class="login">
-        <p>Login</p>
-        <div class="bx">
-            <input type="mail" class="mail inp">
-            <input type="password" class="pwd inp">
-            <br>
-            <br>
-            <button class="btn login-btn">Submit</button>
-        </div>
+
+    <p>Protected page</p>
+
+    <div class="profile-cont">
+        <h4>Test</h4>
+        <h4>test@mail.com</h4>
     </div>
-    <br>
+
+
+
 
     <script src="./isLoggedIn.js"></script>
     <script src="./index.js" type="module"></script>
 
     <script>
-        
         const isLog = isLoggedIn()
+        
         const checkLoggedIn = ()=>{
-            if (isLog) {
-                return window.location = "home.html"
+            if (isLog === false) {
+                return window.location = "index.html"
             }
         }
         checkLoggedIn()

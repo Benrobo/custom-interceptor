@@ -5,6 +5,72 @@ This repo demosterate how the axios interceptor works along with `access token` 
 
 It made up of a `client` and `proxy API` server.
 
+```js
+
+    // code exmaple
+        
+    async function customFetch(url, config = {}) {
+        const cookie = document.cookie
+        let token = cookie.split("=")[1];
+
+        // exp gives us date in milliseconds
+        let { exp } = decode.parseJwt(token);
+
+        // convert milliseconds -> seconds
+        let date = new Date().getTime() / 1000;
+        // check if exp date is < the present date
+        if (exp < date) {
+            const reftoken = getLocalstorage()
+            let authToken = await refreshToken(reftoken.refreshToken)
+            token = authToken.accessTokens
+        }
+        // add headers begfore making requests
+        config["headers"] = {
+            "content-type": "application/json",
+            "Authorization": `Bearer ${token}`
+        }
+
+        let res = await fetch(url, config);
+        let data = await res.json();
+
+        return { res, data }
+    }
+
+
+
+
+
+    // Using the function
+    async function userData() {
+        const cookie = document.cookie
+        let token = cookie.split("=")[1];
+
+        const { id } = decode.parseJwt(token);
+
+        const config = {
+            method: "post",
+            body: JSON.stringify({ id })
+        }
+        const { res, data } = await customFetch("http://localhost:5000/api/user/get", config)
+
+        if (data && data.error === true) {
+            return profileCont.innerHTML = `
+                <p> ${data.message} </p>
+            `
+        }
+
+        if (data && data.result && data.result.length > 0) {
+            data.result.map((user) => {
+                profileCont.innerHTML = `
+                    <h3> ${user.name} </h3>
+                    <h3> ${user.email} </h3>
+                `
+            })
+        }
+    }
+```
+
+
 ### Interceptors.
 
 The Interceptor helps us to modify the HTTP Request by intercepting it before the Request is sent to the back end. The Interceptor can be useful for adding custom headers to the outgoing request, logging the incoming response, etc.
